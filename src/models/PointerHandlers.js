@@ -1,11 +1,22 @@
+import {TextareaController} from '@models/TextareaController.js';
+
 export class PointerHandlers {
   constructor(state = {}) {
     this.state = state;
     this.activeModifiers = this.state.activeModifiers;
     this.layout = this.state.layout;
+
+    this.textareaController = new TextareaController(this.layout);
   }
 
   onPointerDown = (event) => {
+    if (!event.target.dataset.keyCode) return;
+
+    if (event.target.dataset.keyCode === 'Backspace') {
+      this.textareaController.exec('delete');
+      return;
+    }
+
     let targetSymbolClass = '.key__' + this.state.currentLanguage;
 
     const isCapsLockActive = this.state.activeModifiers.CapsLock;
@@ -26,7 +37,12 @@ export class PointerHandlers {
       targetSymbolClass += ' .key__default';
     }
 
-    console.log(event.target.querySelector(targetSymbolClass).textContent);
+    const content = event.target.querySelector(targetSymbolClass).textContent;
+
+    this.textareaController.exec('insert', content);
+
+    console.log(content);
+
   };
 
   init() {

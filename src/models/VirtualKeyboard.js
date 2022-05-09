@@ -3,6 +3,7 @@ import {Textarea} from '@models/Textarea.js';
 import {Keyboard} from '@models/Keyboard.js';
 import {KeyHandlers} from '@models/KeyHandlers.js';
 import {PointerHandlers} from '@models/PointerHandlers.js';
+import {TextareaController} from '@models/TextareaController.js';
 
 export class VirtualKeyboard {
   state = {
@@ -24,10 +25,6 @@ export class VirtualKeyboard {
   };
 
   constructor() {
-    this.render();
-  }
-
-  render() {
     const wrapper = document.createElement('div');
     wrapper.innerHTML = this.getTemplate();
     const template = wrapper.firstElementChild;
@@ -35,6 +32,10 @@ export class VirtualKeyboard {
     document.body.append(template);
 
     this.initEventListeners();
+
+    this.textareaController = new TextareaController(this.state.layout);
+
+    this.textareaController.watchCaret();
   }
 
   getTemplate() {
@@ -49,7 +50,7 @@ export class VirtualKeyboard {
 
   getElements(template) {
     const container = template.querySelector('.virtual-keyboard');
-
+    const textarea = template.querySelector('.textarea');
     const keyboard = template.querySelector('.keyboard');
 
     const keys = {};
@@ -63,6 +64,7 @@ export class VirtualKeyboard {
 
     return {
       container,
+      textarea,
       keyboard,
       keys,
     };
