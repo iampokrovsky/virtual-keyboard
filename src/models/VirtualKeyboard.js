@@ -1,8 +1,7 @@
 import '@styles/style.scss';
-import {Textarea} from '@models/Textarea.js';
-import {Keyboard} from '@models/Keyboard.js';
-import {KeyHandlers} from '@models/KeyHandlers.js';
-import {PointerHandlers} from '@models/PointerHandlers.js';
+import {textareaTemplate} from '@models/textarea-template.js';
+import {keyboardTemplate} from '@models/keyboard-template.js';
+import {EventHandler} from '@models/EventHandler.js';
 import {TextareaController} from '@models/TextareaController.js';
 
 export class VirtualKeyboard {
@@ -41,8 +40,8 @@ export class VirtualKeyboard {
   getTemplate() {
     return `
       <div class="virtual-keyboard">
-        ${(new Textarea()).template}
-        ${(new Keyboard()).template}
+        ${textareaTemplate()}
+        ${keyboardTemplate()}
         <p style="text-align: center;">Для переключения языка комбинация: левыe ctrl + alt</p>
       </div>
     `;
@@ -71,11 +70,8 @@ export class VirtualKeyboard {
   }
 
   initEventListeners() {
-    this.keyHandlers = new KeyHandlers(this.state);
-    this.keyHandlers.init();
-
-    this.pointerHandlers = new PointerHandlers(this.state);
-    this.pointerHandlers.init();
+    this.eventHandler = new EventHandler(this.state);
+    this.eventHandler.init();
   }
 
   remove() {
