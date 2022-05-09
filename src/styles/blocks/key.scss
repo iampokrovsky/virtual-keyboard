@@ -16,7 +16,8 @@
     background-color: $lightgray;
   }
 
-  &:active {
+  &:active,
+  &--active {
     background-color: darken($lightgray, 10%);
   }
 
@@ -44,3 +45,45 @@
     font-size: $key-text-size;
   }
 }
+
+.key__ru {
+  display: none;
+}
+
+.keyboard--ru .key__en {
+  display: none;
+}
+
+.keyboard--ru .key__ru {
+  display: block;
+}
+
+.key__shift,
+.key__caps-lock,
+.key__shift-caps-lock {
+  display: none;
+}
+
+.keyboard--shift .key__default,
+.keyboard--caps-lock .key__default {
+  display: none;
+}
+
+.keyboard--shift .key__shift {
+  display: block;
+}
+
+.keyboard--caps-lock .key__caps-lock {
+  display: block;
+}
+
+.keyboard--shift.keyboard--caps-lock .key__shift,
+.keyboard--shift.keyboard--caps-lock .key__caps-lock {
+  display: none;
+}
+
+.keyboard--shift.keyboard--caps-lock .key__shift-caps-lock {
+  display: block;
+}
+
+

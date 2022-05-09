@@ -3,18 +3,18 @@
   gap: $keys-gap;
 }
 
-.row:first-child .key:first-child {
+.row:first-child > .key:first-child {
   border-top-left-radius: $corner-button-radius;
 }
 
-.row:first-child .key:last-child {
+.row:first-child > .key:last-child {
   border-top-right-radius: $corner-button-radius;
 }
 
-.row:last-child .key:first-child {
+.row:last-child > .key:first-child {
   border-bottom-left-radius: $corner-button-radius;
 }
 
-.row:last-child .key:last-child {
+.row:last-child > .key:last-child {
   border-bottom-right-radius: $corner-button-radius;
 }

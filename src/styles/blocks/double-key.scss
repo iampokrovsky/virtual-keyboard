@@ -8,9 +8,6 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-
-  //align-items: center;
-  //justify-content: center;
   transition: 0.2s ease;
 
   &::before {
@@ -23,13 +20,12 @@
 }
 
 .double-key__sub-key {
-  background-color: $white;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: 0.2s ease;
+  width: auto;
+  height: auto;
+  border: none;
+  padding: 0;
   flex-grow: 1;
+  border-radius: unset;
 
   &:hover {
     background-color: $lightgray;

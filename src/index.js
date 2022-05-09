@@ -1,11 +1,9 @@
-import '@/index.html';
-import '@styles/style.scss';
-import 'simplebar';
-import 'simplebar/dist/simplebar.css';
+import {VirtualKeyboard} from '@models/VirtualKeyboard.js';
 
-console.log(window.navigator);
-document.execCommand('defaultParagraphSeparator', false, 'span');
+new VirtualKeyboard();
 
 setTimeout(() => {
-  document.querySelector('.textarea__content').focus();
-}, 1000);
+  console.log('it\'s working');
+  document.execCommand('forwardDelete', false, null);
+
+}, 5000);
