@@ -2,14 +2,14 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ESLintWebpackPlugin = require('eslint-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const isProd = process.env.NODE_ENV === 'production';
 const isDev = !isProd;
 
 const getFilename = (ext) => (isDev
-    ? `[name].${ext}`
-    : `[name].[contenthash].${ext}`);
+  ? `[name].${ext}`
+  : `[name].[contenthash].${ext}`);
 
 const getCssLoaders = (extra) => {
   const loaders = [
@@ -32,6 +32,7 @@ const getPlugins = () => {
       minify: {
         collapseWhitespace: isProd,
       },
+      fix: true,
     }),
     new MiniCssExtractPlugin({
       filename: getFilename('css'),
@@ -42,6 +43,7 @@ const getPlugins = () => {
   if (isProd) {
     plugins.push(new ESLintWebpackPlugin({
       extensions: ['js'],
+      fix: true,
     }));
   }
 
@@ -68,7 +70,7 @@ module.exports = {
     host: 'localhost',
     hot: true,
   },
-  devtool: isDev ? 'source-map' : '',
+  devtool: isDev ? 'source-map' : false,
   plugins: getPlugins(),
   module: {
     rules: [
@@ -80,6 +82,9 @@ module.exports = {
       {
         test: /\.html$/i,
         loader: 'html-loader',
+        generator: {
+          filename: getFilename('html'),
+        },
       },
       {
         test: /\.css$/,

@@ -1,28 +1,27 @@
+// eslint-disable-next-line import/prefer-default-export
 export class TextareaController {
   static activeInstance;
 
   CARET_BLINK_TIME = 1000;
 
-  constructor(layout) {
+  constructor({ layout: { textarea } } = {}) {
     if (TextareaController.activeInstance) {
-      TextareaController.activeInstance.id;
+      // eslint-disable-next-line no-constructor-return
       return TextareaController.activeInstance;
     }
 
-    this.textarea = layout.textarea;
-
-    // this.watchCaret();
+    this.textarea = textarea;
 
     TextareaController.activeInstance = this;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   exec(action, value) {
     if (action === 'insert') {
       document.execCommand('insertText', false, value);
     }
 
     if (action === 'delete') {
-
       const selection = window.getSelection();
       const node = selection.focusNode;
 
@@ -37,8 +36,10 @@ export class TextareaController {
   watchCaret() {
     const textareaContent = this.textarea.querySelector('.textarea__content');
 
-    this.watchCaretInterval = setInterval(() => textareaContent.focus(),
-        this.CARET_BLINK_TIME);
+    this.watchCaretInterval = setInterval(
+      () => textareaContent.focus(),
+      this.CARET_BLINK_TIME,
+    );
   }
 
   stopWatchCaret() {

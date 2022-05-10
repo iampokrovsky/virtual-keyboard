@@ -1,14 +1,25 @@
 import {TextareaController} from '@models/TextareaController';
 
+// eslint-disable-next-line import/prefer-default-export
 export class EventHandler {
+  static activeInstance;
+
   constructor(state = {}) {
+    if (EventHandler.activeInstance) {
+      // eslint-disable-next-line no-constructor-return
+      return EventHandler.activeInstance;
+    }
+
     this.state = state;
     this.activeModifiers = this.state.activeModifiers;
     this.layout = this.state.layout;
 
-    this.textareaController = new TextareaController(this.layout);
+    this.textareaController = new TextareaController(state);
+
+    EventHandler.activeInstance = this;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   getActiveKeyCode(event) {
     return event.code || event.target.dataset.keyCode;
   }
@@ -17,16 +28,16 @@ export class EventHandler {
     return this.layout.keys[this.getActiveKeyCode(event)];
   }
 
+  // eslint-disable-next-line class-methods-use-this
   getEventDirection(event) {
-    return {
-      'keydown': 'down',
-      'keyup': 'up',
-      'pointerdown': 'down',
-      'pointerup': 'up',
-    }[event.type];
+    return event.type.match(/(up|down)$/gi)[0];
   }
 
   changeKeyHighlight(event) {
+    const activeKeyCode = this.getActiveKeyCode(event);
+
+    if (activeKeyCode === 'CapsLock') return;
+
     const activeKey = this.getActiveKey(event);
 
     if (event.type === 'keydown') {
@@ -37,13 +48,25 @@ export class EventHandler {
     }
   }
 
+  changeModifierState = (event, key) => {
+    const modifiers = Object.keys(this.state.activeModifiers);
+    const eventDirection = this.getEventDirection(event);
+
+    if (!key) {
+      key = this.getActiveKeyCode(event);
+    }
+    if (!modifiers.includes(key)) return;
+
+    this.activeModifiers[key] = (eventDirection === 'down');
+  };
+
   defaultHandlers = {
     down: (event) => {
       const {ShiftLeft, ShiftRight, CapsLock} = this.activeModifiers;
 
       const isShiftActive = ShiftLeft || ShiftRight;
 
-      let targetSymbolClass = '.key__' + this.state.currentLanguage;
+      let targetSymbolClass = `.key__${this.state.currentLanguage}`;
 
       if (isShiftActive && !CapsLock) {
         targetSymbolClass += ' .key__shift';
@@ -83,35 +106,36 @@ export class EventHandler {
     if (this.getEventDirection(event) === 'down') {
       if (this.activeModifiers[pair]) return;
 
-      this.activeModifiers[activeKeyCode] = true;
       this.layout.keyboard.classList.add('keyboard--shift');
     }
 
     if (this.getEventDirection(event) === 'up') {
       this.layout.keys[pair].classList.remove(
-          'key--active');
-      this.activeModifiers[pair] = false;
+          'key--active',
+      );
+      this.changeModifierState(event, pair);
 
-      this.activeModifiers[activeKeyCode] = false;
       this.layout.keyboard.classList.remove('keyboard--shift');
     }
+
+    this.changeModifierState(event);
   };
 
-  altHandler = (event) => {
-    this.activeModifiers[this.getActiveKeyCode(
-        event)] = (this.getEventDirection(event) ===
-        'down');
-  };
+  // altHandler = (event) => {
+  //   this.activeModifiers[this.getActiveKeyCode(
+  //       event,
+  //   )] = (this.getEventDirection(event)
+  //       === 'down');
+  // };
 
-  controlHandler = this.altHandler;
+  // controlHandler = this.altHandler;
 
   specialHandlers = {
     CapsLock: {
       down: (event) => {
         this.activeModifiers.CapsLock = !this.activeModifiers.CapsLock;
 
-        this.layout.keys[this.getActiveKeyCode(event)].classList.toggle(
-            'key--active');
+        this.getActiveKey(event).classList.toggle('key--active');
         this.layout.keyboard.classList.toggle('keyboard--caps-lock');
       },
       up: () => {},
@@ -125,20 +149,20 @@ export class EventHandler {
       up: this.shiftHandler,
     },
     AltLeft: {
-      down: this.altHandler,
-      up: this.altHandler,
+      down: this.changeModifierState,
+      up: this.changeModifierState,
     },
     AltRight: {
-      down: this.altHandler,
-      up: this.altHandler,
+      down: this.changeModifierState,
+      up: this.changeModifierState,
     },
     ControlLeft: {
-      down: this.controlHandler,
-      up: this.controlHandler,
+      down: this.changeModifierState,
+      up: this.changeModifierState,
     },
     ControlRight: {
-      down: this.controlHandler,
-      up: this.controlHandler,
+      down: this.changeModifierState,
+      up: this.changeModifierState,
     },
     Tab: {
       down: () => {
@@ -185,7 +209,7 @@ export class EventHandler {
   specialKeys = Object.keys(this.specialHandlers);
 
   handler = (event) => {
-    const eventType = this.getEventDirection(event);
+    const eventDirection = this.getEventDirection(event);
     const activeKeyCode = this.getActiveKeyCode(event);
 
     if (this.layout.keys[activeKeyCode]) {
@@ -194,13 +218,28 @@ export class EventHandler {
       return;
     }
 
+    if (event.type === 'pointerdown') {
+      this.lastActiveModifier = activeKeyCode;
+    }
+
+    if (event.type === 'pointerup' && this.lastActiveModifier) {
+      this.changeModifierState(event, this.lastActiveModifier);
+    }
+
     if (this.specialKeys.includes(activeKeyCode)) {
-      this.specialHandlers[activeKeyCode][eventType](event);
+      this.specialHandlers[activeKeyCode][eventDirection](event);
     } else {
-      this.defaultHandlers[eventType](event);
+      this.defaultHandlers[eventDirection](event);
     }
 
     this.changeKeyHighlight(event);
+
+    // console.log(this.state.activeModifiers.ShiftLeft);
+    // console.log(this.state.activeModifiers.ShiftRight);
+    // console.log(this.state.activeModifiers.AltLeft);
+    // console.log(this.state.activeModifiers.AltRight);
+    // console.log(this.state.activeModifiers.CapsLock);
+
   };
 
   init() {
@@ -210,7 +249,7 @@ export class EventHandler {
     document.addEventListener('pointerup', this.handler);
   }
 
-  remove() {
+  disable() {
     document.removeEventListener('keydown', this.handler);
     document.removeEventListener('keyup', this.handler);
     document.removeEventListener('pointerdown', this.handler);

@@ -1,5 +1,5 @@
-export const keyboardTemplate = () => {
-  return `
+// eslint-disable-next-line import/prefer-default-export
+export const keyboardTemplate = () => `
     <div class="keyboard">
       <div class="row">
         <div class="key" data-key-code="Backquote">
@@ -674,12 +674,22 @@ export const keyboardTemplate = () => {
         <div class="key key--expand key--word-right" data-key-code="ShiftRight">shift</div>
       </div>
       <div class="row">
-        <div class="key key--ctrl key--word" data-key-code="ControlLeft">ctrl</div>
-        <div class="key key--word" data-key-code="MetaLeft">win</div>
-        <div class="key key--word" data-key-code="AltLeft">alt</div>
+        <div class="key key--ctrl key--word" data-key-code="ControlLeft">control</div>
+        <div class="key key--word" data-key-code="MetaLeft">
+          <div class="key__win">win</div>
+          <div class="key__mac">cmd</div>
+        </div>
+        <div class="key key--word" data-key-code="AltLeft">
+          <div class="key__win">alt</div>
+          <div class="key__mac">option</div>
+        </div>
         <div class="key key--expand" data-key-code="Space"></div>
-        <div class="key key--ctrl key--word" data-key-code="ControlRight">ctrl</div>
-        <div class="key key--word" data-key-code="AltRight">alt</div>
+        <div class="key key--ctrl key--word" data-key-code="ControlRight">control</div>
+        <div class="key key--word" data-key-code="MetaRight">cmd</div>
+        <div class="key key--word" data-key-code="AltRight">
+          <div class="key__win">alt</div>
+          <div class="key__mac">option</div>
+        </div>
         <div class="key" data-key-code="ArrowLeft">◀</div>
         <div class="double-key">
           <div class="double-key__sub-key key" data-key-code="ArrowUp">▲</div>
@@ -689,5 +699,3 @@ export const keyboardTemplate = () => {
       </div>
     </div>
   `;
-};
-

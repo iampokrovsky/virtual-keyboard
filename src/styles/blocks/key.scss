@@ -86,4 +86,24 @@
   display: block;
 }
 
+.key__mac {
+  display: none;
+}
+
+.keyboard--mac .key__mac {
+  display: block;
+}
+
+.keyboard--mac .key__win {
+  display: none;
+}
+
+.keyboard--win .key[data-key-code="MetaRight"] {
+  display: none;
+}
+
+.keyboard--mac .key[data-key-code="ControlRight"] {
+  display: none;
+}
+
 
