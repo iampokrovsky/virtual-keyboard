@@ -4,7 +4,7 @@ export class TextareaController {
 
   CARET_BLINK_TIME = 1000;
 
-  constructor({ layout: { textarea } } = {}) {
+  constructor({layout: {textarea}} = {}) {
     if (TextareaController.activeInstance) {
       // eslint-disable-next-line no-constructor-return
       return TextareaController.activeInstance;
@@ -33,21 +33,4 @@ export class TextareaController {
     }
   }
 
-  watchCaret() {
-    const textareaContent = this.textarea.querySelector('.textarea__content');
-
-    this.watchCaretInterval = setInterval(
-      () => textareaContent.focus(),
-      this.CARET_BLINK_TIME,
-    );
-  }
-
-  stopWatchCaret() {
-    clearInterval(this.watchCaretInterval);
-  }
-
-  destroy() {
-    this.stopWatchCaret();
-    TextareaController.activeInstance = null;
-  }
 }

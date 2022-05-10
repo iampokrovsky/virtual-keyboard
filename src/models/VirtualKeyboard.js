@@ -1,9 +1,8 @@
 import '@styles/style.scss';
-import { textareaTemplate } from '@models/textarea-template.js';
-import { keyboardTemplate } from '@models/keyboard-template.js';
-import { EventHandler } from '@models/EventHandler.js';
-import { TextareaController } from '@models/TextareaController.js';
-import { OSHandler } from '@models/OSHandler.js';
+import {textareaTemplate} from '@models/textarea-template.js';
+import {keyboardTemplate} from '@models/keyboard-template.js';
+import {EventHandler} from '@models/EventHandler.js';
+import {OSHandler} from '@models/OSHandler.js';
 
 // eslint-disable-next-line import/prefer-default-export
 export class VirtualKeyboard {
@@ -43,13 +42,10 @@ export class VirtualKeyboard {
     this.state.layout = this.getElements(template);
     document.body.append(template);
 
-    this.initEventListeners();
-
-    this.textareaController = new TextareaController(this.state);
-    this.textareaController.watchCaret();
-
     this.OSHandler = new OSHandler(this.state);
-    this.OSHandler.init();
+    this.OSHandler.check();
+
+    this.initEventListeners();
   }
 
   // eslint-disable-next-line class-methods-use-this

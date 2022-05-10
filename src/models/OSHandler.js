@@ -4,7 +4,7 @@ import platform from 'platform-detect';
 export class OSHandler {
   static activeInstance;
 
-  constructor({ layout: { keyboard } } = {}) {
+  constructor({layout: {keyboard}} = {}) {
     if (OSHandler.activeInstance) {
       // eslint-disable-next-line no-constructor-return
       return OSHandler.activeInstance;
@@ -15,7 +15,7 @@ export class OSHandler {
     OSHandler.activeInstance = this;
   }
 
-  handler = () => {
+  check = () => {
     if (platform.windows) {
       this.keyboard.classList.add('keyboard--win');
     }
@@ -24,17 +24,4 @@ export class OSHandler {
       this.keyboard.classList.add('keyboard--mac');
     }
   };
-
-  init() {
-    document.addEventListener('DOMContentLoaded', this.handler);
-  }
-
-  disable() {
-    document.removeEventListener('DOMContentLoaded', this.handler);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  destroy() {
-    OSHandler.activeInstance = null;
-  }
 }
