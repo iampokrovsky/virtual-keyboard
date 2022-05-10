@@ -1,4 +1,5 @@
-import {TextareaController} from '@models/TextareaController';
+import {TextareaController} from '@models/TextareaController.js';
+import {LanguageToggle} from '@models/LanguageToggle.js';
 
 // eslint-disable-next-line import/prefer-default-export
 export class EventHandler {
@@ -15,6 +16,7 @@ export class EventHandler {
     this.layout = this.state.layout;
 
     this.textareaController = new TextareaController(state);
+    this.languageToggle = new LanguageToggle(state);
 
     EventHandler.activeInstance = this;
   }
@@ -233,6 +235,8 @@ export class EventHandler {
     }
 
     this.changeKeyHighlight(event);
+
+    this.languageToggle.check();
 
     // console.log(this.state.activeModifiers.ShiftLeft);
     // console.log(this.state.activeModifiers.ShiftRight);
