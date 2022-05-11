@@ -82,8 +82,6 @@ export class TextareaController {
 
       if (!targetRow) return;
 
-      console.log(rows);
-
       const offset = Math.floor(
         Math.abs(currentRow.length - targetRow.length) / 2,
       );
