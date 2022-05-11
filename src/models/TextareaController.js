@@ -28,10 +28,10 @@ export class TextareaController {
     let start = 0;
 
     return text.split(sep).reduce((rows, rowText, index) => {
+      // eslint-disable-next-line no-param-reassign
       const result = rows;
       const str = rowText + sep;
-
-      const end = start + text.length;
+      const end = start + str.length;
 
       const row = {
         index,
@@ -45,6 +45,7 @@ export class TextareaController {
         row.caret = true;
         row.caretPosition = caretPos - start;
 
+        // eslint-disable-next-line no-param-reassign
         result.caretRow = index;
       }
 
@@ -52,7 +53,7 @@ export class TextareaController {
 
       start = end;
 
-      return rows;
+      return result;
     }, []);
   }
 
@@ -80,6 +81,8 @@ export class TextareaController {
       const targetRow = rows[targetRowIndex];
 
       if (!targetRow) return;
+
+      console.log(rows);
 
       const offset = Math.floor(
         Math.abs(currentRow.length - targetRow.length) / 2,

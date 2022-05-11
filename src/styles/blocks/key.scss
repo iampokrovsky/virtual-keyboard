@@ -90,19 +90,19 @@
   display: none;
 }
 
-.keyboard--mac .key__mac {
+.virtual-keyboard--mac .key__mac {
   display: block;
 }
 
-.keyboard--mac .key__win {
+.virtual-keyboard--mac .key__win {
   display: none;
 }
 
-.keyboard--win .key[data-key-code="MetaRight"] {
+.virtual-keyboard--win .key[data-key-code="MetaRight"] {
   display: none;
 }
 
-.keyboard--mac .key[data-key-code="ControlRight"] {
+.virtual-keyboard--mac .key[data-key-code="ControlRight"] {
   display: none;
 }
 

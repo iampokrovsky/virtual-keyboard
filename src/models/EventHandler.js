@@ -35,15 +35,19 @@ export class EventHandler {
 
   changeKeyHighlight(event) {
     const activeKeyCode = this.getActiveKeyCode(event);
-    const isSpecialKey = this.specialKeys.includes(activeKeyCode);
-    const isSpecialKeyActive = this.activeModifiers[activeKeyCode];
+
+    if (activeKeyCode === 'CapsLock') return;
 
     const activeKey = this.getActiveKey(event);
+    const isModifier = Object.keys(this.activeModifiers)
+      .includes(activeKeyCode);
+    const isModifierActive = this.activeModifiers[activeKeyCode];
 
     if (event.type === 'keydown') {
-      if (isSpecialKey && !isSpecialKeyActive) return;
+      if (isModifier && !isModifierActive) return;
       activeKey.classList.add('key--active');
     }
+
     if (event.type === 'keyup') {
       activeKey.classList.remove('key--active');
     }
@@ -275,7 +279,8 @@ export class EventHandler {
       this.lastActiveModifier = activeKeyCode;
     }
 
-    if (event.type === 'pointerup' && this.lastActiveModifier) {
+    if (event.type === 'pointerup' && this.lastActiveModifier
+        && this.lastActiveModifier !== 'CapsLock') {
       this.changeModifierState(event, this.lastActiveModifier);
     }
 
