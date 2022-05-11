@@ -26,9 +26,9 @@ export class EventHandler {
     return event.code || event.target.dataset.keyCode;
   }
 
-  getActiveKey(event) {
+  getActiveKey = (event) => {
     return this.layout.keys[this.getActiveKeyCode(event)];
-  }
+  };
 
   // eslint-disable-next-line class-methods-use-this
   getEventDirection(event) {
@@ -38,11 +38,19 @@ export class EventHandler {
   changeKeyHighlight(event) {
     const activeKeyCode = this.getActiveKeyCode(event);
 
-    if (activeKeyCode === 'CapsLock') return;
+    // if (activeKeyCode === 'CapsLock') return;
+
+    // Обработка событий специальных клавши отдельно
+
+    // this.specialKeys.includes(activeKeyCode);
+
+    const isSpecialKey = this.specialKeys.includes(activeKeyCode);
+    const isSpecialKeyActive = this.activeModifiers[activeKeyCode];
 
     const activeKey = this.getActiveKey(event);
 
     if (event.type === 'keydown') {
+      if (isSpecialKey && !isSpecialKeyActive) return;
       activeKey.classList.add('key--active');
     }
     if (event.type === 'keyup') {
@@ -100,8 +108,7 @@ export class EventHandler {
     up: () => {},
   };
 
-  shiftHandler(event) {
-    // TODO доделать переключение шифтов
+  shiftHandler = (event) => {
     const activeKeyCode = this.getActiveKeyCode(event);
 
     const shiftPairs = {
@@ -112,15 +119,14 @@ export class EventHandler {
     const pair = [shiftPairs[activeKeyCode]];
 
     if (this.getEventDirection(event) === 'down') {
+
       if (this.activeModifiers[pair]) return;
 
       this.layout.keyboard.classList.add('keyboard--shift');
     }
 
     if (this.getEventDirection(event) === 'up') {
-      this.layout.keys[pair].classList.remove(
-          'key--active',
-      );
+      this.layout.keys[pair].classList.remove('key--active');
       this.changeModifierState(event, pair);
 
       this.layout.keyboard.classList.remove('keyboard--shift');
