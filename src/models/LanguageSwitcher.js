@@ -40,7 +40,7 @@ export class LanguageSwitcher {
     this.keyboard.classList.add('keyboard--' + newLang);
   }
 
-  setFromCookies() {
+  setDefault() {
     const savedLanguage = Cookies.get(this.cookie.name);
 
     if (savedLanguage) {

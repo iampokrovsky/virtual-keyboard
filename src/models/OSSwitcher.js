@@ -1,21 +1,21 @@
 import platform from 'platform-detect';
 
 // eslint-disable-next-line import/prefer-default-export
-export class OSHandler {
+export class OSSwitcher {
   static activeInstance;
 
   constructor({layout: {keyboard}} = {}) {
-    if (OSHandler.activeInstance) {
+    if (OSSwitcher.activeInstance) {
       // eslint-disable-next-line no-constructor-return
-      return OSHandler.activeInstance;
+      return OSSwitcher.activeInstance;
     }
 
     this.keyboard = keyboard;
 
-    OSHandler.activeInstance = this;
+    OSSwitcher.activeInstance = this;
   }
 
-  check = () => {
+  switch() {
     if (platform.windows) {
       this.keyboard.classList.add('keyboard--win');
     }

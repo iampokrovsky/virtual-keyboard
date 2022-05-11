@@ -51,7 +51,7 @@ export class EventHandler {
   }
 
   changeModifierState = (event, key) => {
-    const modifiers = Object.keys(this.state.activeModifiers);
+    const modifiers = Object.keys(this.activeModifiers);
     const eventDirection = this.getEventDirection(event);
 
     if (!key) {
@@ -61,6 +61,12 @@ export class EventHandler {
 
     this.activeModifiers[key] = (eventDirection === 'down');
   };
+
+  isControlActive() {
+    const {ControlLeft, ControlRight} = this.activeModifiers;
+
+    return ControlLeft || ControlRight;
+  }
 
   defaultHandlers = {
     down: (event) => {
@@ -94,7 +100,7 @@ export class EventHandler {
     up: () => {},
   };
 
-  shiftHandler = (event) => {
+  shiftHandler(event) {
     // TODO доделать переключение шифтов
     const activeKeyCode = this.getActiveKeyCode(event);
 
@@ -211,10 +217,7 @@ export class EventHandler {
     },
     KeyA: {
       down: (event) => {
-        const {ControlLeft, ControlRight} = this.activeModifiers;
-        const isControlActive = ControlLeft || ControlRight;
-
-        if (isControlActive) {
+        if (this.isControlActive()) {
           this.textareaController.exec('selectAll');
         } else {
           this.defaultHandlers.down(event);
@@ -222,7 +225,40 @@ export class EventHandler {
       },
       up: () => {},
     },
-
+    KeyC: {
+      down: (event) => {
+        if (this.isControlActive()) {
+          const selected = window.getSelection().toString();
+          window.navigator.clipboard.writeText(selected);
+        } else {
+          this.defaultHandlers.down(event);
+        }
+      },
+      up: () => {},
+    },
+    KeyV: {
+      down: (event) => {
+        if (this.isControlActive()) {
+          navigator.clipboard.readText().then(
+              (clip) => this.textareaController.exec('insert', clip));
+        } else {
+          this.defaultHandlers.down(event);
+        }
+      },
+      up: () => {},
+    },
+    KeyZ: {
+      down: (event) => {
+        if (!this.isControlActive()) this.defaultHandlers.down(event);
+      },
+      up: () => {},
+    },
+    KeyY: {
+      down: (event) => {
+        if (!this.isControlActive()) this.defaultHandlers.down(event);
+      },
+      up: () => {},
+    },
   };
 
   specialKeys = Object.keys(this.specialHandlers);

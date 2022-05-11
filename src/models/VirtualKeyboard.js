@@ -2,7 +2,7 @@ import '@styles/style.scss';
 import {textareaTemplate} from '@models/textarea-template.js';
 import {keyboardTemplate} from '@models/keyboard-template.js';
 import {EventHandler} from '@models/EventHandler.js';
-import {OSHandler} from '@models/OSHandler.js';
+import {OSSwitcher} from '@models/OSSwitcher.js';
 import {LanguageSwitcher} from '@models/LanguageSwitcher.js';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -43,13 +43,14 @@ export class VirtualKeyboard {
     this.state.layout = this.getElements(template);
     document.body.append(template);
 
-    this.OSHandler = new OSHandler(this.state);
-    this.OSHandler.check();
+    this.OSSwitcher = new OSSwitcher(this.state);
+    this.OSSwitcher.switch();
 
     this.languageSwitcher = new LanguageSwitcher(this.state);
-    this.languageSwitcher.setFromCookies();
+    this.languageSwitcher.setDefault();
 
-    this.initEventListeners();
+    this.eventHandler = new EventHandler(this.state);
+    this.eventHandler.init();
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -87,8 +88,7 @@ export class VirtualKeyboard {
   }
 
   initEventListeners() {
-    this.eventHandler = new EventHandler(this.state);
-    this.eventHandler.init();
+
   }
 
   remove() {
