@@ -23,8 +23,8 @@ export class LanguageSwitcher {
 
   setLanguage(lang) {
     const languages = {
-      'en': 'ru',
-      'ru': 'en',
+      en: 'ru',
+      ru: 'en',
     };
 
     const prevLang = languages[lang] || this.state.currentLanguage;
@@ -34,10 +34,10 @@ export class LanguageSwitcher {
 
     Cookies.remove(this.cookie.name);
 
-    Cookies.set(this.cookie.name, newLang, {expires: this.cookie.expires});
+    Cookies.set(this.cookie.name, newLang, { expires: this.cookie.expires });
 
-    this.keyboard.classList.remove('keyboard--' + prevLang);
-    this.keyboard.classList.add('keyboard--' + newLang);
+    this.keyboard.classList.remove(`keyboard--${prevLang}`);
+    this.keyboard.classList.add(`keyboard--${newLang}`);
   }
 
   setDefault() {
@@ -51,12 +51,14 @@ export class LanguageSwitcher {
   }
 
   switch() {
-    const {ControlLeft, ControlRight, AltLeft, AltRight} = this.activeModifiers;
+    const {
+      ControlLeft, ControlRight, AltLeft, AltRight,
+    } = this.activeModifiers;
     const isControlActive = ControlLeft || ControlRight;
     const isAltActive = AltLeft || AltRight;
 
     if (isControlActive && isAltActive) {
       this.setLanguage();
     }
-  };
+  }
 }

@@ -4,7 +4,7 @@ import platform from 'platform-detect';
 export class OSSwitcher {
   static activeInstance;
 
-  constructor({layout: {container}} = {}) {
+  constructor({ layout: { container } } = {}) {
     if (OSSwitcher.activeInstance) {
       // eslint-disable-next-line no-constructor-return
       return OSSwitcher.activeInstance;
@@ -23,5 +23,5 @@ export class OSSwitcher {
     if (platform.macos) {
       this.container.classList.add('virtual-keyboard--mac');
     }
-  };
+  }
 }

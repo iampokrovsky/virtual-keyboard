@@ -4,5 +4,3 @@ export const textareaTemplate = () => `
       <textarea class="textarea__element" autofocus></textarea>
     </div>
   `;
-
-// Пожалуйста, дайте еще 1 день на доработку🥺

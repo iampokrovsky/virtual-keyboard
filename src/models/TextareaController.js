@@ -2,9 +2,7 @@
 export class TextareaController {
   static activeInstance;
 
-  CARET_BLINK_TIME = 1000;
-
-  constructor({layout: {textarea}} = {}) {
+  constructor({ layout: { textarea } } = {}) {
     if (TextareaController.activeInstance) {
       // eslint-disable-next-line no-constructor-return
       return TextareaController.activeInstance;
@@ -30,14 +28,15 @@ export class TextareaController {
     let start = 0;
 
     return text.split(sep).reduce((rows, rowText, index) => {
-      rowText += sep;
+      const result = rows;
+      const str = rowText + sep;
 
-      const end = start + rowText.length;
+      const end = start + text.length;
 
       const row = {
         index,
-        text: rowText,
-        length: rowText.length,
+        text: str,
+        length: str.length,
         start,
         end,
       };
@@ -46,10 +45,10 @@ export class TextareaController {
         row.caret = true;
         row.caretPosition = caretPos - start;
 
-        rows.caretRow = index;
+        result.caretRow = index;
       }
 
-      rows.push(row);
+      result.push(row);
 
       start = end;
 
@@ -83,12 +82,13 @@ export class TextareaController {
       if (!targetRow) return;
 
       const offset = Math.floor(
-          Math.abs(currentRow.length - targetRow.length) / 2);
+        Math.abs(currentRow.length - targetRow.length) / 2,
+      );
 
       const multiplier = (currentRow.length > targetRow.length) ? -1 : 1;
 
-      newPosition = currentRow.caretPosition + offset * multiplier +
-          targetRow.start;
+      newPosition = currentRow.caretPosition + offset * multiplier
+          + targetRow.start;
 
       if (newPosition < targetRow.start) {
         newPosition = targetRow.start;

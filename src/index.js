@@ -1,4 +1,4 @@
-import {VirtualKeyboard} from '@models/VirtualKeyboard.js';
+import { VirtualKeyboard } from '@models/VirtualKeyboard.js';
 
 const virtualKeyboard = new VirtualKeyboard();
 
