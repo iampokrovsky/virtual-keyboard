@@ -3,6 +3,7 @@ import {textareaTemplate} from '@models/textarea-template.js';
 import {keyboardTemplate} from '@models/keyboard-template.js';
 import {EventHandler} from '@models/EventHandler.js';
 import {OSHandler} from '@models/OSHandler.js';
+import {LanguageSwitcher} from '@models/LanguageSwitcher.js';
 
 // eslint-disable-next-line import/prefer-default-export
 export class VirtualKeyboard {
@@ -45,6 +46,9 @@ export class VirtualKeyboard {
     this.OSHandler = new OSHandler(this.state);
     this.OSHandler.check();
 
+    this.languageSwitcher = new LanguageSwitcher(this.state);
+    this.languageSwitcher.setFromCookies();
+
     this.initEventListeners();
   }
 
@@ -61,7 +65,7 @@ export class VirtualKeyboard {
 
   // eslint-disable-next-line class-methods-use-this
   getElements(template) {
-    const textarea = template.querySelector('.textarea');
+    const textarea = template.querySelector('.textarea__element');
     const keyboard = template.querySelector('.keyboard');
 
     const keys = {};

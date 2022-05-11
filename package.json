@@ -36,6 +36,7 @@
     "webpack-dev-server": "^4.9.0"
   },
   "dependencies": {
+    "js-cookie": "^3.0.1",
     "normalize.css": "^8.0.1",
     "platform-detect": "^3.0.1"
   }

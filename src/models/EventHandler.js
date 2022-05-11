@@ -1,5 +1,5 @@
 import {TextareaController} from '@models/TextareaController.js';
-import {LanguageToggle} from '@models/LanguageToggle.js';
+import {LanguageSwitcher} from '@models/LanguageSwitcher.js';
 
 // eslint-disable-next-line import/prefer-default-export
 export class EventHandler {
@@ -16,7 +16,7 @@ export class EventHandler {
     this.layout = this.state.layout;
 
     this.textareaController = new TextareaController(state);
-    this.languageToggle = new LanguageToggle(state);
+    this.languageSwitcher = new LanguageSwitcher(state);
 
     EventHandler.activeInstance = this;
   }
@@ -123,15 +123,6 @@ export class EventHandler {
     this.changeModifierState(event);
   };
 
-  // altHandler = (event) => {
-  //   this.activeModifiers[this.getActiveKeyCode(
-  //       event,
-  //   )] = (this.getEventDirection(event)
-  //       === 'down');
-  // };
-
-  // controlHandler = this.altHandler;
-
   specialHandlers = {
     CapsLock: {
       down: (event) => {
@@ -184,26 +175,47 @@ export class EventHandler {
       },
       up: () => {},
     },
-    ArrowUp: {
+    Space: {
       down: () => {
         this.textareaController.exec('insert', ' ');
       },
       up: () => {},
     },
+    ArrowUp: {
+      down: () => {
+        this.textareaController.exec('moveUp');
+      },
+      up: () => {},
+    },
     ArrowDown: {
-      down: () => {},
+      down: () => {
+        this.textareaController.exec('moveDown');
+      },
       up: () => {},
     },
     ArrowLeft: {
-      down: () => {},
+      down: () => {
+        this.textareaController.exec('moveLeft');
+      },
       up: () => {},
     },
     ArrowRight: {
-      down: () => {},
+      down: () => {
+        this.textareaController.exec('moveRight');
+      },
       up: () => {},
     },
-    default: {
-      down: () => {},
+    KeyA: {
+      down: (event) => {
+        const {ControlLeft, ControlRight} = this.activeModifiers;
+        const isControlActive = ControlLeft || ControlRight;
+
+        if (isControlActive) {
+          this.textareaController.exec('selectAll');
+        } else {
+          this.defaultHandlers.down(event);
+        }
+      },
       up: () => {},
     },
   };
@@ -236,7 +248,7 @@ export class EventHandler {
 
     this.changeKeyHighlight(event);
 
-    this.languageToggle.check();
+    this.languageSwitcher.switch();
 
     // console.log(this.state.activeModifiers.ShiftLeft);
     // console.log(this.state.activeModifiers.ShiftRight);
