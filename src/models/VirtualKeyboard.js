@@ -59,7 +59,11 @@ export class VirtualKeyboard {
       <div class="virtual-keyboard">
         ${textareaTemplate()}
         ${keyboardTemplate()}
-        <p style="text-align: center;">Для переключения языка комбинация: левыe ctrl + alt</p>
+        <p class="language-snippet" style="text-align: center;">Для переключения языка используйте клавиши
+          <span class="language-snippet__win">Сtrl + Alt</span>
+          <span class="language-snippet__mac">Сtrl + Opt</span>
+        </p>
+        <a class="virtual-keyboard__github-link" href="https://github.com/iampokrovsky/virtual-keyboard" target="_blank"><span class="visually-hidden">Репозиторий на GitHub</span></a>
       </div>
     `;
   }
@@ -85,10 +89,6 @@ export class VirtualKeyboard {
       keyboard,
       keys,
     };
-  }
-
-  initEventListeners() {
-
   }
 
   remove() {

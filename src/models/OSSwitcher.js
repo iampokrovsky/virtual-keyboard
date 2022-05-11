@@ -4,24 +4,24 @@ import platform from 'platform-detect';
 export class OSSwitcher {
   static activeInstance;
 
-  constructor({layout: {keyboard}} = {}) {
+  constructor({layout: {container}} = {}) {
     if (OSSwitcher.activeInstance) {
       // eslint-disable-next-line no-constructor-return
       return OSSwitcher.activeInstance;
     }
 
-    this.keyboard = keyboard;
+    this.container = container;
 
     OSSwitcher.activeInstance = this;
   }
 
   switch() {
     if (platform.windows) {
-      this.keyboard.classList.add('keyboard--win');
+      this.container.classList.add('virtual-keyboard--win');
     }
 
     if (platform.macos) {
-      this.keyboard.classList.add('keyboard--mac');
+      this.container.classList.add('virtual-keyboard--mac');
     }
   };
 }
