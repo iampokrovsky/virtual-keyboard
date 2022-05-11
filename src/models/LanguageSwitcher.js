@@ -48,8 +48,6 @@ export class LanguageSwitcher {
     } else {
       this.setLanguage(this.state.currentLanguage);
     }
-
-    console.log(Cookies.get(this.cookie.name));
   }
 
   switch() {

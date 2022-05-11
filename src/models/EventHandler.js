@@ -157,6 +157,10 @@ export class EventHandler {
       down: this.changeModifierState,
       up: this.changeModifierState,
     },
+    MetaLeft: {
+      down: () => {},
+      up: () => {},
+    },
     Tab: {
       down: () => {
         this.textareaController.exec('insert', '\t');
@@ -218,6 +222,7 @@ export class EventHandler {
       },
       up: () => {},
     },
+
   };
 
   specialKeys = Object.keys(this.specialHandlers);

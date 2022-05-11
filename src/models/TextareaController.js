@@ -16,84 +16,126 @@ export class TextareaController {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  // actions = {}
-
-  // getCaret(el) {
-  //   if (el.selectionStart) {
-  //     return el.selectionStart;
-  //   } else if (document.selection) {
-  //     el.focus();
-  //
-  //     var r = document.selection.createRange();
-  //     if (r == null) {
-  //       return 0;
-  //     }
-  //
-  //     var re = el.createTextRange(),
-  //         rc = re.duplicate();
-  //     re.moveToBookmark(r.getBookmark());
-  //     rc.setEndPoint('EndToStart', re);
-  //
-  //     return rc.text.length;
-  //   }
-  //   return 0;
-  // }
-
-  getCaretPos(obj) {
-    obj.focus();
-    if (obj.selectionStart) return obj.selectionStart;
-    else if (document.selection) {
-      var sel = document.selection.createRange();
-      var clone = sel.duplicate();
-      sel.collapse(true);
-      clone.moveToElementText(obj);
-      clone.setEndPoint('EndToEnd', sel);
-      return clone.text.length;
-    }
-    return 0;
+  setSelection(start, end) {
+    this.textarea.selectionStart = start;
+    this.textarea.selectionEnd = end || start;
   }
 
-  changeCaretPosition = (direction, start) => {
-    const directions = {
+  getRows() {
+    const text = this.textarea.value;
+    const caretPos = this.textarea.selectionStart;
+
+    const sep = '\n';
+
+    let start = 0;
+
+    return text.split(sep).reduce((rows, rowText, index) => {
+      rowText += sep;
+
+      const end = start + rowText.length;
+
+      const row = {
+        index,
+        text: rowText,
+        length: rowText.length,
+        start,
+        end,
+      };
+
+      if (caretPos >= start && caretPos <= end) {
+        row.caret = true;
+        row.caretPosition = caretPos - start;
+
+        rows.caretRow = index;
+      }
+
+      rows.push(row);
+
+      start = end;
+
+      return rows;
+    }, []);
+  }
+
+  moveCaret(direction, start) {
+    const directionsShifts = {
       left: -1,
       right: +1,
+      up: -1,
+      down: +1,
     };
 
-    const newPosition = (start || this.textarea.selectionStart) +
-        directions[direction];
+    const shift = directionsShifts[direction];
+    let newPosition;
 
-    if (newPosition < 0) return;
+    if (direction === 'left' || direction === 'right') {
+      newPosition = (start || this.textarea.selectionStart) + shift;
 
-    this.textarea.selectionStart = newPosition;
-    this.textarea.selectionEnd = newPosition;
-  };
+      if (newPosition < 0) return;
+    }
+
+    if (direction === 'up' || direction === 'down') {
+      const rows = this.getRows();
+      const currentRow = rows[rows.caretRow];
+      const targetRowIndex = rows.caretRow + shift;
+      const targetRow = rows[targetRowIndex];
+
+      if (!targetRow) return;
+
+      const offset = Math.floor(
+          Math.abs(currentRow.length - targetRow.length) / 2);
+
+      const multiplier = (currentRow.length > targetRow.length) ? -1 : 1;
+
+      newPosition = currentRow.caretPosition + offset * multiplier +
+          targetRow.start;
+
+      if (newPosition < targetRow.start) {
+        newPosition = targetRow.start;
+      }
+
+      if (newPosition > targetRow.end) {
+        newPosition = targetRow.end - 1;
+      }
+    }
+
+    this.setSelection(newPosition);
+  }
 
   exec(action, value) {
-    const selectionStart = this.textarea.selectionStart;
-    const selectionEnd = this.textarea.selectionEnd;
+    const start = this.textarea.selectionStart;
+    const end = this.textarea.selectionEnd;
     const fieldValue = this.textarea.value;
 
     this.textarea.focus();
 
     if (action === 'moveLeft') {
-      this.changeCaretPosition('left');
+      this.moveCaret('left');
     }
 
     if (action === 'moveRight') {
-      this.changeCaretPosition('right');
+      this.moveCaret('right');
+    }
+
+    if (action === 'moveUp') {
+      this.moveCaret('up');
+    }
+
+    if (action === 'moveDown') {
+      this.moveCaret('down');
     }
 
     if (action === 'insert') {
-      this.textarea.setRangeText(value, selectionStart, selectionEnd, 'end');
+      this.textarea.setRangeText(value, start, end, 'end');
     }
 
     if (action === 'delete') {
-      if (selectionStart === selectionEnd && selectionStart > 0) {
-        const changedSubStr = fieldValue.slice(0, selectionStart - 1);
-        const unchangedSubStr = fieldValue.slice(selectionStart);
+      if (start === end && start > 0) {
+        const changedSubStr = fieldValue.slice(0, start - 1);
+        const unchangedSubStr = fieldValue.slice(start);
         this.textarea.value = changedSubStr + unchangedSubStr;
 
-        this.changeCaretPosition('left', selectionStart);
+        this.moveCaret('left', start);
       } else {
         this.textarea.setRangeText('');
       }
@@ -103,22 +145,4 @@ export class TextareaController {
       this.textarea.select();
     }
   }
-
-  // exec(action, value) {
-  //   if (action === 'insert') {
-  //     document.execCommand('insertText', false, value);
-  //   }
-  //
-  //   if (action === 'delete') {
-  //     const selection = window.getSelection();
-  //     const node = selection.focusNode;
-  //
-  //     if (selection.type === 'Range') {
-  //       selection.getRangeAt(0).deleteContents();
-  //     } else {
-  //       node.textContent = node.textContent.slice(0, -1);
-  //     }
-  //   }
-  // }
-
 }
