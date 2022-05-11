@@ -1,0 +1,22 @@
+.virtual-keyboard {
+  width: 1092px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.virtual-keyboard__github-link {
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin: 0 auto;
+  background-image: url("@assets/images/github.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  transition: 0.2s ease;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}

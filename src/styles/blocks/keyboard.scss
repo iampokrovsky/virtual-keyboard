@@ -1,0 +1,12 @@
+.keyboard {
+  background-color: $gray;
+  border-radius: 38px;
+  box-shadow: 0 4px 30px rgba(196, 196, 196, 0.2);
+  padding: $padding;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: $keys-gap;
+  font-size: 20px;
+  user-select: none;
+}

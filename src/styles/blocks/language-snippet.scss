@@ -1,0 +1,15 @@
+.language-snippet {
+  margin-top: 24px;
+}
+
+.language-snippet__mac {
+  display: none;
+}
+
+.virtual-keyboard--mac .language-snippet__win {
+  display: none;
+}
+
+.virtual-keyboard--mac .language-snippet__mac {
+  display: inline;
+}

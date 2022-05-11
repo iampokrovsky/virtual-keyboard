@@ -1,0 +1,45 @@
+.double-key {
+  width: $key-side-size;
+  height: $key-side-size;
+  border: 1px solid $darkgray;
+  background-color: $white;
+  border-radius: 5px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: 0.2s ease;
+
+  &::before {
+    content: "";
+    height: 1px;
+    width: 100%;
+    background-color: $darkgray;
+    order: 2;
+  }
+}
+
+.double-key__sub-key {
+  width: auto;
+  height: auto;
+  border: none;
+  padding: 0;
+  flex-grow: 1;
+  border-radius: unset;
+
+  &:hover {
+    background-color: $lightgray;
+  }
+
+  &:active {
+    background-color: darken($lightgray, 10%);
+  }
+
+  &:first-child {
+    order: 1;
+  }
+
+  &:last-child {
+    order: 3;
+  }
+}

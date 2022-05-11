@@ -1,2 +1,5 @@
-import '@/index.html';
-import '@styles/style.scss';
+import { VirtualKeyboard } from '@models/VirtualKeyboard.js';
+
+const virtualKeyboard = new VirtualKeyboard();
+
+virtualKeyboard.render();

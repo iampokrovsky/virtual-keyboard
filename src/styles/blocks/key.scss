@@ -1,0 +1,109 @@
+.key {
+  width: $key-side-size;
+  height: $key-side-size;
+  border: 1px solid $darkgray;
+  background-color: $white;
+  border-radius: 5px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s ease;
+  padding: $padding;
+  overflow: hidden;
+
+  &:hover {
+    background-color: $lightgray;
+  }
+
+  &:active,
+  &--active {
+    background-color: darken($lightgray, 10%);
+  }
+
+  &--expand {
+    flex-grow: 1;
+  }
+
+  &--ctrl {
+    width: 85px;
+  }
+
+  &--word {
+    font-size: $key-text-size;
+  }
+
+  &--word-left {
+    align-items: flex-end;
+    justify-content: flex-start;
+    font-size: $key-text-size;
+  }
+
+  &--word-right {
+    align-items: flex-end;
+    justify-content: flex-end;
+    font-size: $key-text-size;
+  }
+}
+
+.key__ru {
+  display: none;
+}
+
+.keyboard--ru .key__en {
+  display: none;
+}
+
+.keyboard--ru .key__ru {
+  display: block;
+}
+
+.key__shift,
+.key__caps-lock,
+.key__shift-caps-lock {
+  display: none;
+}
+
+.keyboard--shift .key__default,
+.keyboard--caps-lock .key__default {
+  display: none;
+}
+
+.keyboard--shift .key__shift {
+  display: block;
+}
+
+.keyboard--caps-lock .key__caps-lock {
+  display: block;
+}
+
+.keyboard--shift.keyboard--caps-lock .key__shift,
+.keyboard--shift.keyboard--caps-lock .key__caps-lock {
+  display: none;
+}
+
+.keyboard--shift.keyboard--caps-lock .key__shift-caps-lock {
+  display: block;
+}
+
+.key__mac {
+  display: none;
+}
+
+.virtual-keyboard--mac .key__mac {
+  display: block;
+}
+
+.virtual-keyboard--mac .key__win {
+  display: none;
+}
+
+.virtual-keyboard--win .key[data-key-code="MetaRight"] {
+  display: none;
+}
+
+.virtual-keyboard--mac .key[data-key-code="ControlRight"] {
+  display: none;
+}
+
+
