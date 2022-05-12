@@ -9,7 +9,11 @@ module.exports = {
       },
     },
   },
-  rules: {},
+  rules: {
+    'linebreak-style': [
+      'error',
+      process.platform === 'win32' ? 'windows' : 'unix'],
+  },
   env: {
     es6: true,
     browser: true,
