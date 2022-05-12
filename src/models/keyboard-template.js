@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/prefer-default-export
-export const keyboardTemplate = () => `
+export default () => `
     <div class="keyboard">
       <div class="row">
         <div class="key" data-key-code="Backquote">

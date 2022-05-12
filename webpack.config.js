@@ -2,14 +2,14 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ESLintWebpackPlugin = require('eslint-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const isProd = process.env.NODE_ENV === 'production';
 const isDev = !isProd;
 
 const getFilename = (ext) => (isDev
-    ? `[name].${ext}`
-    : `[name].[contenthash].${ext}`);
+  ? `[name].${ext}`
+  : `[name].[contenthash].${ext}`);
 
 const getCssLoaders = (extra) => {
   const loaders = [
@@ -29,7 +29,7 @@ const getPlugins = () => {
     new HtmlWebpackPlugin({
       title: 'Virtual Keyboard',
       favicon: 'src/assets/favicon.svg',
-      meta: {viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=1'},
+      meta: { viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=1' },
       // template: path.resolve(__dirname, 'src/index.html'),
       minify: {
         collapseWhitespace: isProd,

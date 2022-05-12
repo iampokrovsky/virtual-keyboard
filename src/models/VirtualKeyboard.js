@@ -1,12 +1,11 @@
 import '@styles/style.scss';
-import { textareaTemplate } from '@models/textarea-template.js';
-import { keyboardTemplate } from '@models/keyboard-template.js';
-import { EventHandler } from '@models/EventHandler.js';
-import { OSSwitcher } from '@models/OSSwitcher.js';
-import { LanguageSwitcher } from '@models/LanguageSwitcher.js';
+import textareaTemplate from '@models/textarea-template.js';
+import keyboardTemplate from '@models/keyboard-template.js';
+import EventHandler from '@models/EventHandler.js';
+import OSSwitcher from '@models/OSSwitcher.js';
+import LanguageSwitcher from '@models/LanguageSwitcher.js';
 
-// eslint-disable-next-line import/prefer-default-export
-export class VirtualKeyboard {
+export default class VirtualKeyboard {
   static activeInstance;
 
   state = {
@@ -28,19 +27,16 @@ export class VirtualKeyboard {
   };
 
   constructor() {
-    if (VirtualKeyboard.activeInstance) {
-      // eslint-disable-next-line no-constructor-return
-      return VirtualKeyboard.activeInstance;
-    }
+    if (VirtualKeyboard.activeInstance) return;
 
     VirtualKeyboard.activeInstance = this;
   }
 
   render() {
     const wrapper = document.createElement('div');
-    wrapper.innerHTML = this.getTemplate();
+    wrapper.innerHTML = VirtualKeyboard.getTemplate();
     const template = wrapper.firstElementChild;
-    this.state.layout = this.getElements(template);
+    this.state.layout = VirtualKeyboard.getElements(template);
     document.body.append(template);
 
     this.OSSwitcher = new OSSwitcher(this.state);
@@ -53,8 +49,7 @@ export class VirtualKeyboard {
     this.eventHandler.on();
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  getTemplate() {
+  static getTemplate() {
     return `
       <div class="virtual-keyboard">
         ${textareaTemplate()}
@@ -68,20 +63,19 @@ export class VirtualKeyboard {
     `;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  getElements(template) {
+  static getElements(template) {
     const textarea = template.querySelector('.textarea__element');
     const keyboard = template.querySelector('.keyboard');
-
-    const keys = {};
     const keysElements = template.querySelectorAll('[data-key-code]');
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (const key of keysElements) {
+    const keys = [...keysElements].reduce((obj, key) => {
+      const result = obj;
       const name = key.dataset.keyCode;
 
-      keys[name] = key;
-    }
+      result[name] = key;
+
+      return result;
+    }, {});
 
     return {
       container: template,
@@ -100,10 +94,9 @@ export class VirtualKeyboard {
     this.layout = {};
     this.state.currentLanguage = 'en';
 
-    // eslint-disable-next-line guard-for-in,no-restricted-syntax
-    for (const modifier in this.state.activeModifiers) {
+    Object.keys(this.state.activeModifiers).forEach((modifier) => {
       this.state.activeModifiers[modifier] = false;
-    }
+    });
 
     this.eventHandler.off();
   }

@@ -1,7 +1,6 @@
 import Cookies from 'js-cookie';
 
-// eslint-disable-next-line import/prefer-default-export
-export class LanguageSwitcher {
+export default class LanguageSwitcher {
   static activeInstance;
 
   cookie = {
@@ -10,10 +9,8 @@ export class LanguageSwitcher {
   };
 
   constructor(state = {}) {
-    if (LanguageSwitcher.activeInstance) {
-      // eslint-disable-next-line no-constructor-return
-      return LanguageSwitcher.activeInstance;
-    }
+    if (LanguageSwitcher.activeInstance) return;
+
     this.state = state;
     this.keyboard = state.layout.keyboard;
     this.activeModifiers = state.activeModifiers;
@@ -34,7 +31,9 @@ export class LanguageSwitcher {
 
     Cookies.remove(this.cookie.name);
 
-    Cookies.set(this.cookie.name, newLang, { expires: this.cookie.expires });
+    Cookies.set(this.cookie.name, newLang, {
+      expires: this.cookie.expires,
+    });
 
     this.keyboard.classList.remove(`keyboard--${prevLang}`);
     this.keyboard.classList.add(`keyboard--${newLang}`);
@@ -52,7 +51,10 @@ export class LanguageSwitcher {
 
   switch() {
     const {
-      ControlLeft, ControlRight, AltLeft, AltRight,
+      ControlLeft,
+      ControlRight,
+      AltLeft,
+      AltRight,
     } = this.activeModifiers;
     const isControlActive = ControlLeft || ControlRight;
     const isAltActive = AltLeft || AltRight;

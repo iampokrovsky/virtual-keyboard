@@ -1,19 +1,14 @@
-// eslint-disable-next-line import/prefer-default-export
-export class TextareaController {
+export default class TextareaController {
   static activeInstance;
 
   constructor({ layout: { textarea } } = {}) {
-    if (TextareaController.activeInstance) {
-      // eslint-disable-next-line no-constructor-return
-      return TextareaController.activeInstance;
-    }
+    if (TextareaController.activeInstance) return;
 
     this.textarea = textarea;
 
     TextareaController.activeInstance = this;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   setSelection(start, end) {
     this.textarea.selectionStart = start;
     this.textarea.selectionEnd = end || start;
@@ -28,7 +23,6 @@ export class TextareaController {
     let start = 0;
 
     return text.split(sep).reduce((rows, rowText, index) => {
-      // eslint-disable-next-line no-param-reassign
       const result = rows;
       const str = rowText + sep;
       const end = start + str.length;
@@ -45,7 +39,6 @@ export class TextareaController {
         row.caret = true;
         row.caretPosition = caretPos - start;
 
-        // eslint-disable-next-line no-param-reassign
         result.caretRow = index;
       }
 

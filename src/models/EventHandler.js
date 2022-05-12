@@ -1,15 +1,11 @@
-import { TextareaController } from '@models/TextareaController.js';
-import { LanguageSwitcher } from '@models/LanguageSwitcher.js';
+import TextareaController from '@models/TextareaController.js';
+import LanguageSwitcher from '@models/LanguageSwitcher.js';
 
-// eslint-disable-next-line import/prefer-default-export
-export class EventHandler {
+export default class EventHandler {
   static activeInstance;
 
   constructor(state = {}) {
-    if (EventHandler.activeInstance) {
-      // eslint-disable-next-line no-constructor-return
-      return EventHandler.activeInstance;
-    }
+    if (EventHandler.activeInstance) return;
 
     this.state = state;
     this.activeModifiers = this.state.activeModifiers;
@@ -21,20 +17,20 @@ export class EventHandler {
     EventHandler.activeInstance = this;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  getActiveKeyCode(event) {
+  static getActiveKeyCode(event) {
     return event.code || event.target.dataset.keyCode;
   }
 
-  getActiveKey = (event) => this.layout.keys[this.getActiveKeyCode(event)];
-
-  // eslint-disable-next-line class-methods-use-this
-  getEventDirection(event) {
+  static getEventDirection(event) {
     return event.type.match(/(up|down)$/gi)[0];
   }
 
+  getActiveKey = (event) => this.layout.keys[EventHandler.getActiveKeyCode(
+    event,
+  )];
+
   changeKeyHighlight(event) {
-    const activeKeyCode = this.getActiveKeyCode(event);
+    const activeKeyCode = EventHandler.getActiveKeyCode(event);
 
     if (activeKeyCode === 'CapsLock') return;
 
@@ -56,10 +52,10 @@ export class EventHandler {
   changeModifierState = (event, key) => {
     let targetKey = key;
     const modifiers = Object.keys(this.activeModifiers);
-    const eventDirection = this.getEventDirection(event);
+    const eventDirection = EventHandler.getEventDirection(event);
 
     if (!targetKey) {
-      targetKey = this.getActiveKeyCode(event);
+      targetKey = EventHandler.getActiveKeyCode(event);
     }
     if (!modifiers.includes(targetKey)) return;
 
@@ -67,14 +63,21 @@ export class EventHandler {
   };
 
   isControlActive() {
-    const { ControlLeft, ControlRight } = this.activeModifiers;
+    const {
+      ControlLeft,
+      ControlRight,
+    } = this.activeModifiers;
 
     return ControlLeft || ControlRight;
   }
 
   defaultHandlers = {
     down: (event) => {
-      const { ShiftLeft, ShiftRight, CapsLock } = this.activeModifiers;
+      const {
+        ShiftLeft,
+        ShiftRight,
+        CapsLock,
+      } = this.activeModifiers;
 
       const isShiftActive = ShiftLeft || ShiftRight;
 
@@ -105,7 +108,7 @@ export class EventHandler {
   };
 
   shiftHandler = (event) => {
-    const activeKeyCode = this.getActiveKeyCode(event);
+    const activeKeyCode = EventHandler.getActiveKeyCode(event);
 
     const shiftPairs = {
       ShiftLeft: 'ShiftRight',
@@ -114,13 +117,13 @@ export class EventHandler {
 
     const pair = [shiftPairs[activeKeyCode]];
 
-    if (this.getEventDirection(event) === 'down') {
+    if (EventHandler.getEventDirection(event) === 'down') {
       if (this.activeModifiers[pair]) return;
 
       this.layout.keyboard.classList.add('keyboard--shift');
     }
 
-    if (this.getEventDirection(event) === 'up') {
+    if (EventHandler.getEventDirection(event) === 'up') {
       this.layout.keys[pair].classList.remove('key--active');
       this.changeModifierState(event, pair);
 
@@ -266,8 +269,8 @@ export class EventHandler {
   specialKeys = Object.keys(this.specialHandlers);
 
   handler = (event) => {
-    const eventDirection = this.getEventDirection(event);
-    const activeKeyCode = this.getActiveKeyCode(event);
+    const eventDirection = EventHandler.getEventDirection(event);
+    const activeKeyCode = EventHandler.getActiveKeyCode(event);
 
     if (this.layout.keys[activeKeyCode]) {
       event.preventDefault();
@@ -280,7 +283,7 @@ export class EventHandler {
     }
 
     if (event.type === 'pointerup' && this.lastActiveModifier
-        && this.lastActiveModifier !== 'CapsLock') {
+      && this.lastActiveModifier !== 'CapsLock') {
       this.changeModifierState(event, this.lastActiveModifier);
     }
 

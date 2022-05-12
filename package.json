@@ -4,7 +4,7 @@
   "description": "A task for RS School frontend course",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npx eslint src/**/*.js",
     "build": "webpack --mode=production --node-env=production",
     "dev": "webpack --mode=development --node-env=development",
     "watch": "webpack --watch",

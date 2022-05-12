@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/prefer-default-export
-export const textareaTemplate = () => `
+export default () => `
     <div class="textarea">
       <textarea class="textarea__element" autofocus>Привет! 😊</textarea>
     </div>

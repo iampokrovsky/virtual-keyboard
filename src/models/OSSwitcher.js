@@ -1,14 +1,10 @@
 import platform from 'platform-detect';
 
-// eslint-disable-next-line import/prefer-default-export
-export class OSSwitcher {
+export default class OSSwitcher {
   static activeInstance;
 
   constructor({ layout: { container } } = {}) {
-    if (OSSwitcher.activeInstance) {
-      // eslint-disable-next-line no-constructor-return
-      return OSSwitcher.activeInstance;
-    }
+    if (OSSwitcher.activeInstance) return;
 
     this.container = container;
 
